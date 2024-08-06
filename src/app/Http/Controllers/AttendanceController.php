@@ -18,7 +18,7 @@ class AttendanceController extends Controller
     public function punch()
     {
         // 現在の日付とユーザーIDの取得
-        $now_date = Carbon::now()->format('Y-m-d');
+        $now_date = Carbon::now();
         $user_id = Auth::user()->id;
         // 当日の勤務記録を確認
         $confirm_date = Work::where('user_id', $user_id)
@@ -38,7 +38,7 @@ class AttendanceController extends Controller
     public function work(Request $request)
     {
         // 現在の日時とユーザーIDの取得
-        $now_date = Carbon::now()->format('Y-m-d');
+        $now_date = Carbon::now();
         $now_time = Carbon::now()->format('H:i:s');
         $user_id = Auth::user()->id;
         // 勤務IDの取得（休憩処理のため）
@@ -98,13 +98,14 @@ class AttendanceController extends Controller
     // 日別一覧表示
     public function indexDate(Request $request)
     {
-        // 現在の日付を取得
-        $displayDate = Carbon::now();
+        // リクエストから 'displayDate' を取得し、文字列として扱う
+        $displayDate = $request->input('displayDate', Carbon::now()->format('Y-m-d'));
 
         // attendance_view_table から現在の日付のレコードを取得し、5件ずつページネート
         $users = DB::table('attendance_view_table')
             ->whereDate('date', $displayDate)
-            ->paginate(5);
+            ->paginate(5)
+            ->appends(['displayDate' => $displayDate]);
 
         // 取得したデータを 'attendance' ビューに渡して表示
         return view('attendance', compact('users', 'displayDate'));
@@ -113,23 +114,24 @@ class AttendanceController extends Controller
     // 日別一覧 / 抽出処理
     public function perDate(Request $request)
     {
-        // リクエストから 'displayDate' を取得し、Carbon インスタンスに変換
-        $displayDate = Carbon::parse($request->input('displayDate'));
+        // リクエストから 'displayDate' を取得し、文字列として扱う
+        $displayDate = $request->input('displayDate', Carbon::now()->format('Y-m-d'));
 
         // 'prevDate' ボタンが押された場合、日付を1日減少
         if ($request->has('prevDate')) {
-            $displayDate->subDay();
+            $displayDate = Carbon::parse($displayDate)->subDay()->format('Y-m-d');
         }
 
         // 'nextDate' ボタンが押された場合、日付を1日増加
         if ($request->has('nextDate')) {
-            $displayDate->addDay();
+            $displayDate = Carbon::parse($displayDate)->addDay()->format('Y-m-d');
         }
 
         // attendance_view_table から特定の日付のレコードを取得し、5件ずつページネート
         $users = DB::table('attendance_view_table')
             ->whereDate('date', $displayDate)
-            ->paginate(5);
+            ->paginate(5)
+            ->appends(['displayDate' => $displayDate]);
 
         // 取得したデータを 'attendance' ビューに渡して表示
         return view('attendance', compact('users', 'displayDate'));

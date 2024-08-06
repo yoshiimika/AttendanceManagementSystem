@@ -9,7 +9,7 @@
         @csrf
         <button class="date__change-button" name="prevDate"><</button>
         <input type="hidden" name="displayDate" value="{{ $displayDate }}">
-        <p class="header__text">{{ $displayDate->format('Y-m-d') }}</p>
+        <p class="header__text">{{ $displayDate }}</p>
         <button class="date__change-button" name="nextDate">></button>
     </form>
 
@@ -33,5 +33,5 @@
             @endforeach
         </table>
     </div>
-    {{ $users->links('vendor/pagination/paginate') }}
+    {{ $users->appends(['displayDate' => $displayDate])->links('vendor/pagination/paginate') }}
 @endsection
