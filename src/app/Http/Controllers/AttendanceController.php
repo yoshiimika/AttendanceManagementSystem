@@ -18,18 +18,40 @@ class AttendanceController extends Controller
     public function punch()
     {
         // 現在の日付とユーザーIDの取得
-        $now_date = Carbon::now();
+        $now_date = Carbon::now()->format('Y-m-d');
         $user_id = Auth::user()->id;
+
+        // 終了していない最後の勤務を取得
+        $last_work = Work::where('user_id', $user_id)
+            ->whereNull('end')
+            ->latest('date')
+            ->first();
+
+        // 前日の勤務終了処理
+        if ($last_work && $last_work->date != $now_date) {
+            $last_work->end = '23:59:59';
+            $last_work->save();
+
+        // 新しい勤務開始を翌日の0時に設定
+        $new_work = new Work();
+        $new_work->date = $now_date;
+        $new_work->start = '00:00:00';
+        $new_work->user_id = $user_id;
+        $new_work->save();
+        }
+
         // 当日の勤務記録を確認
         $confirm_date = Work::where('user_id', $user_id)
             ->where('date', $now_date)
             ->first();
+
         // 勤怠ステータスの確認と設定
         if (!$confirm_date) {
             $status = 0;
         } else {
             $status = Auth::user()->status;
         }
+
         // ビューにデータを渡して表示
         return view('stamp', compact('status'));
     }
@@ -38,9 +60,28 @@ class AttendanceController extends Controller
     public function work(Request $request)
     {
         // 現在の日時とユーザーIDの取得
-        $now_date = Carbon::now();
+        $now_date = Carbon::now()->format('Y-m-d');
         $now_time = Carbon::now()->format('H:i:s');
         $user_id = Auth::user()->id;
+
+        // 日を跨いだ場合、前日の勤務終了処理を自動的に行う
+        $last_work = Work::where('user_id', $user_id)
+            ->whereNull('end')
+            ->latest('date')
+            ->first();
+
+        if ($last_work && $last_work->date != $now_date) {
+            $last_work->end = '23:59:59';
+            $last_work->save();
+
+            // 新しい勤務開始を翌日の0時に設定
+            $new_work = new Work();
+            $new_work->date = $now_date;
+            $new_work->start = '00:00:00';
+            $new_work->user_id = $user_id;
+            $new_work->save();
+        }
+
         // 勤務IDの取得（休憩処理のため）
         if ($request->has('start_rest') || $request->has('end_rest')) {
             $work_id = Work::where('user_id', $user_id)
