@@ -148,8 +148,8 @@ class AttendanceController extends Controller
             ->paginate(5)
             ->appends(['displayDate' => $displayDate]);
 
-        // 取得したデータを 'attendance' ビューに渡して表示
-        return view('attendance', compact('users', 'displayDate'));
+        // 取得したデータを 'attendance_date' ビューに渡して表示
+        return view('attendance_date', compact('users', 'displayDate'));
     }
 
     // 日別一覧 / 抽出処理
@@ -175,6 +175,65 @@ class AttendanceController extends Controller
             ->appends(['displayDate' => $displayDate]);
 
         // 取得したデータを 'attendance' ビューに渡して表示
-        return view('attendance', compact('users', 'displayDate'));
+        return view('attendance_date', compact('users', 'displayDate'));
+    }
+
+    // 勤怠表表示
+    public function indexUser(Request $request)
+    {
+        // 現在の年月を取得
+        $currentMonth = Carbon::now()->format('Y-m');
+
+        // リクエストで指定された月があればそれを使用、なければ現在の月を使用
+        $selectedMonth = $request->input('month', $currentMonth);
+
+        // ログインしているユーザーの名前を取得
+        $displayUser = Auth::user()->name;
+
+        // 指定された月のログインユーザーの勤務データを取得
+        $users = DB::table('attendance_view_table')
+            ->where('name', $displayUser)
+            ->where('date', 'like', $selectedMonth . '%')
+            ->paginate(5)
+            ->appends(['month' => $selectedMonth]);
+
+        // 全ユーザーリストを取得
+        $userList = User::all();
+
+        return view('attendance_user', compact('users', 'displayUser', 'userList', 'selectedMonth'));
+    }
+
+    // 勤怠表 / 検索処理
+    public function perUser(Request $request)
+    {
+        // 検索されたユーザー名を取得
+        $searchName = $request->input('search_name');
+        $user = User::where('name', $searchName)->first();
+        $displayUser = $user ? $user->name : null;
+
+        // 現在の年月を取得
+        $currentMonth = Carbon::now()->format('Y-m');
+
+        // リクエストで指定された月があればそれを使用、なければ現在の月を使用
+        $selectedMonth = $request->input('month', $currentMonth);
+
+        $users = DB::table('attendance_view_table')
+            ->where('name', $searchName)
+            ->where('date', 'like', $selectedMonth . '%')
+            ->paginate(5)
+            ->appends(['month' => $selectedMonth]);
+
+        $userList = User::all();
+
+        return view('attendance_user', compact('users', 'displayUser', 'userList', 'selectedMonth'));
+    }
+
+    // ユーザー一覧表示
+    public function user()
+    {
+        $users = User::paginate(5);
+        $displayDate = Carbon::now();
+
+        return view('user', compact('users', 'displayDate'));
     }
 }

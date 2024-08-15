@@ -22,8 +22,18 @@ Route::get('/',[AttendanceController::class,'punch'])
 Route::post('/work', [AttendanceController::class, 'work'])
     ->name('work');
 
-// 管理ページの表示
-Route::get('/attendance', [AttendanceController::class, 'indexDate'])
-    ->name('attendance');
-Route::post('/attendance', [AttendanceController::class, 'perDate'])
+// 日付別管理ページの表示
+Route::get('/attendance/date', [AttendanceController::class, 'indexDate'])
+    ->name('attendance/date');
+Route::post('/attendance/date', [AttendanceController::class, 'perDate'])
     ->name('per/date');
+
+// 勤怠表の表示
+Route::get('/attendance/user', [AttendanceController::class, 'indexUser'])
+    ->name('attendance/user');
+Route::post('/attendance/user', [AttendanceController::class, 'perUser'])
+    ->name('per/user');
+
+// ユーザー別管理ページの表示
+Route::get('/user', [AttendanceController::class, 'user'])
+    ->name('user');

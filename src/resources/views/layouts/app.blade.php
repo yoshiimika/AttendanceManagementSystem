@@ -25,9 +25,17 @@
                     @csrf
                         <button class="header__item-link" type="submit">ホーム</button>
                     </form>
-                    <form class="header__right-item" action="{{ route('attendance') }}" method="GET">
+                    <form class="header__right-item" action="{{ route('attendance/date') }}" method="GET">
                     @csrf
                         <button class="header__item-link" type="submit">日付一覧</button>
+                    </form>
+                    <form class="header__right-item" action="{{ route('attendance/user') }}" method="GET">
+                    @csrf
+                        <button class="header__item-link" type="submit">勤怠表</button>
+                    </form>
+                    <form class="header__right-item" action="{{ route('user') }}" method="GET">
+                    @csrf
+                        <button class="header__item-link" type="submit">ユーザー一覧</button>
                     </form>
                     <form class="header__right-item" action="{{ route('logout') }}" method="POST">
                     @csrf
