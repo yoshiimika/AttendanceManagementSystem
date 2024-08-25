@@ -54,8 +54,50 @@ AttendanceManagementSystem
 </pre>
 
 2.docker-compose.ymlの作成  
-docker-compose.ymlファイルに、以下の内容を追加してください。
+`docker-compose.yml`ファイルに、以下の内容を追加してください。  
+```yaml
+version: '3.8'
 
+services:
+    nginx:
+        image: nginx:1.21.1
+        ports:
+            - "80:80"
+        volumes:
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./src:/var/www/
+        depends_on:
+            - php
+
+    php:
+        build: ./docker/php
+        volumes:
+            - ./src:/var/www/
+
+    mysql:
+        image: mysql:8.0.26
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel_db
+            MYSQL_USER: laravel_user
+            MYSQL_PASSWORD: laravel_pass
+        command:
+            mysqld --default-authentication-plugin=mysql_native_password
+        volumes:
+            - ./docker/mysql/data:/var/lib/mysql
+            - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=mysql
+            - PMA_USER=laravel_user
+            - PMA_PASSWORD=laravel_pass
+        depends_on:
+            - mysql
+        ports:
+            - 8080:80
 3.Nginxの設定  
 
 4.PHPの設定  
