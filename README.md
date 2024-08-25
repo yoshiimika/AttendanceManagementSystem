@@ -36,8 +36,8 @@
 # 開発環境
 ## Dockerビルド
 
-1.ディレクトリの作成　　
-ディレクトリ構成
+1.ディレクトリの作成  
+ディレクトリ構成  
 AttendanceManagementSystem
 ├── docker
 │   ├── mysql
