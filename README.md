@@ -53,6 +53,7 @@ AttendanceManagementSystem
 └── src  
 </pre>
 
+```markdown
 2.docker-compose.ymlの作成  
 `docker-compose.yml`ファイルに、以下の内容を追加してください。  
 ```yaml
