@@ -37,7 +37,7 @@
 ## Dockerビルド
 
 1.ディレクトリの作成  
-プロジェクトのディレクトリ構造を以下のように作成してください。
+プロジェクトのディレクトリ構造を以下のように作成して下さい。
 <pre>
 AttendanceManagementSystem  
 ├── docker  
@@ -54,7 +54,7 @@ AttendanceManagementSystem
 </pre>
 
 2.docker-compose.ymlの作成  
-`docker-compose.yml`ファイルに、以下の内容を追加してください。  
+`docker-compose.yml`ファイルに、以下の内容を追加して下さい。  
 ```
 version: '3.8'
 
@@ -77,10 +77,10 @@ services:
     mysql:
         image: mysql:8.0.26
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: laravel_db
-            MYSQL_USER: laravel_user
-            MYSQL_PASSWORD: laravel_pass
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         command:
             mysqld --default-authentication-plugin=mysql_native_password
         volumes:
@@ -102,8 +102,54 @@ services:
 
 3.Nginxの設定
 `docker/nginx/default.conf`ファイルに以下の内容を追加してください。
+```
+server {
+    listen 80;
+    index index.php index.html;
+    server_name localhost;
+
+    root /var/www/public;
+
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+}
+```
 
 4.PHPの設定  
+`docker/php/Dockerfile`ファイルに以下の内容を追加してください。
+```
+FROM php:7.4.9-fpm
+
+COPY php.ini /usr/local/etc/php/
+
+RUN apt update \
+  && apt install -y default-mysql-client zlib1g-dev libzip-dev unzip \
+  && docker-php-ext-install pdo_mysql zip
+
+RUN curl -sS https://getcomposer.org/installer | php \
+  && mv composer.phar /usr/local/bin/composer \
+  && composer self-update
+
+WORKDIR /var/www
+```
+`docker/php/php.ini`ファイルに以下の内容を追加してください。
+```
+date.timezone = "Asia/Tokyo"
+
+[mbstring]
+mbstring.internal_encoding = "UTF-8"
+mbstring.language = "Japanese"
+```
 
 5.MySQLの設定  
 
