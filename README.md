@@ -38,6 +38,7 @@
 
 1.ディレクトリの作成  
 ディレクトリ構成  
+<pre>
 AttendanceManagementSystem  
 ├── docker  
 │   ├── mysql  
@@ -50,6 +51,7 @@ AttendanceManagementSystem
 │       └── php.ini  
 ├── docker-compose.yml  
 └── src  
+</pre>
 
 2.docker-compose up -d --build
 
