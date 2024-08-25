@@ -52,7 +52,18 @@ AttendanceManagementSystem
 └── src  
 </pre>
 
-2.docker-compose up -d --build
+2.docker-compose.ymlの作成  
+
+３.Nginxの設定  
+
+４.PHPの設定  
+
+5.MySQLの設定  
+
+6.phpMyAdminの設定  
+
+7.docker-composeコマンドでビルド  
+$ docker-compose up -d --build
 
 ## Laravel環境開発
 
