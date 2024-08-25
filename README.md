@@ -37,7 +37,6 @@
 ## Dockerビルド
 
 1.ディレクトリの作成  
-ディレクトリ構成  
 <pre>
 AttendanceManagementSystem  
 ├── docker  
