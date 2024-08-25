@@ -55,7 +55,7 @@ AttendanceManagementSystem
   
 2.docker-compose.ymlの作成  
 `docker-compose.yml`ファイルに、以下の内容を追加してください。  
-```yaml
+```
 version: '3.8'
 
 services:
@@ -98,7 +98,8 @@ services:
             - mysql
         ports:
             - 8080:80
-
+```
+　　
 3.Nginxの設定
 `docker/nginx/default.conf`ファイルに以下の内容を追加してください。
 
