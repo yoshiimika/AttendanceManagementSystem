@@ -98,7 +98,9 @@ services:
             - mysql
         ports:
             - 8080:80
-3.Nginxの設定  
+
+3.Nginxの設定
+`docker/nginx/default.conf`ファイルに以下の内容を追加してください。
 
 4.PHPの設定  
 
