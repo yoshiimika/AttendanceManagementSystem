@@ -86,22 +86,10 @@ services:
         volumes:
             - ./docker/mysql/data:/var/lib/mysql
             - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        environment:
-            - PMA_ARBITRARY=1
-            - PMA_HOST=mysql
-            - PMA_USER=laravel_user
-            - PMA_PASSWORD=laravel_pass
-        depends_on:
-            - mysql
-        ports:
-            - 8080:80
 ```
 
-3.Nginxの設定
-`docker/nginx/default.conf`ファイルに以下の内容を追加してください。
+3.Nginxの設定  
+`docker/nginx/default.conf`ファイルに以下の内容を追加して下さい。
 ```
 server {
     listen 80;
@@ -126,7 +114,7 @@ server {
 ```
 
 4.PHPの設定  
-`docker/php/Dockerfile`ファイルに以下の内容を追加してください。
+`docker/php/Dockerfile`ファイルに以下の内容を追加して下さい。
 ```
 FROM php:7.4.9-fpm
 
@@ -142,7 +130,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 WORKDIR /var/www
 ```
-`docker/php/php.ini`ファイルに以下の内容を追加してください。
+`docker/php/php.ini`ファイルに以下の内容を追加して下さい。
 ```
 date.timezone = "Asia/Tokyo"
 
@@ -152,8 +140,31 @@ mbstring.language = "Japanese"
 ```
 
 5.MySQLの設定  
+`docker/mysql/my.cnf`ファイルに以下の内容を追加して下さい。
+```
+[mysqld]
+character-set-server = utf8mb4
+
+collation-server = utf8mb4_unicode_ci
+
+default-time-zone = 'Asia/Tokyo'
+```
 
 6.phpMyAdminの設定  
+`docker-compose.yml`ファイルに、以下の内容を追加して下さい。  
+```
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=mysql
+            - PMA_USER=laravel_user
+            - PMA_PASSWORD=laravel_pass
+        depends_on:
+            - mysql
+        ports:
+            - 8080:80
+```
 
 7.docker-compose up -d --build
 
