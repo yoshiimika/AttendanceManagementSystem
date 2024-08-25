@@ -38,18 +38,18 @@
 
 1.ディレクトリの作成  
 ディレクトリ構成  
-AttendanceManagementSystem
-├── docker
-│   ├── mysql
-│   │   ├── data
-│   │   └── my.cnf
-│   ├── nginx
-│   │   └── default.conf
-│   └── php
-│       ├── Dockerfile
-│       └── php.ini
-├── docker-compose.yml
-└── src
+AttendanceManagementSystem  
+├── docker  
+│   ├── mysql  
+│   │   ├── data  
+│   │   └── my.cnf  
+│   ├── nginx  
+│   │   └── default.conf  
+│   └── php  
+│       ├── Dockerfile  
+│       └── php.ini  
+├── docker-compose.yml  
+└── src  
 
 2.docker-compose up -d --build
 
