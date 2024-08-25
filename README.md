@@ -28,8 +28,7 @@
 - MySQL8.0
 
 ## テーブル設計
-<<img width="646" alt="スクリーンショット 2024-08-22 7 29 07" src="https://github.com/user-attachments/assets/155e16c7-c01d-4b3f-b1f5-59c9b1a385dd">
->
+<img width="646" alt="スクリーンショット 2024-08-22 7 29 07" src="https://github.com/user-attachments/assets/155e16c7-c01d-4b3f-b1f5-59c9b1a385dd">
 
 ## ER図
 ![Atte](https://github.com/user-attachments/assets/698274f4-d76c-4d95-9f57-f076a2803044)
