@@ -37,6 +37,7 @@
 ## Dockerビルド
 
 1.ディレクトリの作成  
+プロジェクトのディレクトリ構造を以下のように作成してください。
 <pre>
 AttendanceManagementSystem  
 ├── docker  
@@ -53,6 +54,7 @@ AttendanceManagementSystem
 </pre>
 
 2.docker-compose.ymlの作成  
+docker-compose.ymlファイルに、以下の内容を追加してください。
 
 3.Nginxの設定  
 
